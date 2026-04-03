@@ -79,7 +79,7 @@ The JWT token contains the following claims:
 ```
 
 ### Token Expiration
-- **Duration:** 1 hour
+- **Duration:** 1 Day
 - **Renewal:** User must log in again
 - **Storage:** HTTP-only cookie with secure and sameSite flags
 
@@ -1037,7 +1037,7 @@ curl -X GET http://localhost:8000/dashboard/summary \
 ### Example 5: Filter Records
 **Request:**
 ```bash
-curl -X GET "http://localhost:8000/api/filter-records?date=2026-04-02&category=groceries" \
+curl -X GET "http://localhost:8000/api/filter-records?date=2026-03-06&category=Shopping" \
   -H "Cookie: token=<jwt_token>"
 ```
 
@@ -1066,7 +1066,7 @@ curl -X GET "http://localhost:8000/api/filter-records?date=2026-04-02&category=g
 ### Example 6: Search Records
 **Request:**
 ```bash
-curl -X GET "http://localhost:8000/api/search-records?keyword=salary&minAmount=4000&maxAmount=6000" \
+curl -X GET "http://localhost:8000/api/search-records?keyword=salary&minAmount=10000&maxAmount=50000" \
   -H "Cookie: token=<jwt_token>"
 ```
 
