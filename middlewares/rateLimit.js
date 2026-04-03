@@ -1,6 +1,5 @@
 const rateLimit = require('express-rate-limit');
 
-// Rate limiting middleware for login and register routes
 const loginLimiter = rateLimit({
     windowMs: 1 * 60 * 1000,
     max: 5,

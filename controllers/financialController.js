@@ -1,8 +1,76 @@
 const FinancialModel = require("../models/financialModel");
 
+// Getting financial data for the dashboard
+const getFinancialData = async (req, res) => {
+    const { page = 1, limit = 10 } = req.query;
+    if (page < 1 || limit < 1) {
+        return res.status(400).json({
+            success: false,
+            error: "Page and limit must be positive integers"
+        });
+    }
+    try {
+        const financialData = await FinancialModel.find({ userId: req.user._id , status : "active" })
+            .skip((parseInt(page) - 1) * parseInt(limit))
+            .limit(parseInt(limit));
+        res.status(200).json({
+            success: true,
+            data: financialData
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            error: error.message
+        });
+    }
+};
+
+// getting single financial entry
+const getFinancialEntry = async (req, res) => {
+    const { id } = req.params;
+    if (!id) {
+        return res.status(400).json({
+            success: false,
+            error: "Financial entry ID is required"
+        });
+    }
+    try {
+        const financialEntry = await FinancialModel.findById(id);
+        if (!financialEntry) {
+            return res.status(404).json({
+                success: false,
+                error: "Financial entry not found"
+            });
+        }
+        if (req.user.role !== "admin" && financialEntry.userId.toString() !== req.user._id.toString()) {
+            return res.status(403).json({
+                success: false,
+                error: "You do not have permission to access this entry"
+            });
+        }
+        
+        res.status(200).json({
+            success: true,
+            data: financialEntry
+        });
+    }
+    catch (error) {
+        res.status(500).json({
+            success: false,
+            error: error.message
+        });
+    }
+};
+
 // Creating new financial entry
 const createFinancialEntry = async (req, res) => {
     const { amount, category, date, notes, type } = req.body;
+    if (!amount || !category || !date || !type) {
+        return res.status(400).json({
+            success: false,
+            error: "Amount, category, date, and type are required fields"
+        });
+    }
     try {
         // console.log(req.user)
         const newEntry = new FinancialModel({
@@ -29,7 +97,12 @@ const createFinancialEntry = async (req, res) => {
 const updateFinancialEntry = async (req, res) => {
     const { id } = req.params;
     const { amount, category, date, notes, type } = req.body;
-
+    if (!id) {
+        return res.status(400).json({
+            success: false,
+            error: "Financial entry ID is required"
+        });
+    }
     try {
         const entry = await FinancialModel.findById(id);
         if (!entry) {
@@ -65,6 +138,12 @@ const updateFinancialEntry = async (req, res) => {
 // Deleting financial entry
 const deleteFinancialEntry = async (req, res) => {
     const { id } = req.params;
+    if (!id) {
+        return res.status(400).json({
+            success: false,
+            error: "Financial entry ID is required"
+        });
+    }
     try {
         const entry = await FinancialModel.findById(id);
         if (!entry) {
@@ -92,54 +171,6 @@ const deleteFinancialEntry = async (req, res) => {
         });
     }
 };
-
-// Getting financial data for the dashboard
-const getFinancialData = async (req, res) => {
-    try {
-        const financialData = await FinancialModel.find({ userId: req.user._id, status: "active" });
-        res.status(200).json({
-            success: true,
-            data: financialData
-        });
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            error: error.message
-        });
-    }
-};
-
-// getting single financial entry
-const getFinancialEntry = async (req, res) => {
-    const { id } = req.params;
-    try {
-        const financialEntry = await FinancialModel.findById(id);
-        if (!financialEntry) {
-            return res.status(404).json({
-                success: false,
-                error: "Financial entry not found"
-            });
-        }
-        if (req.user.role !== "admin" && financialEntry.userId.toString() !== req.user._id.toString()) {
-            return res.status(403).json({
-                success: false,
-                error: "You do not have permission to access this entry"
-            });
-        }
-        
-        res.status(200).json({
-            success: true,
-            data: financialEntry
-        });
-    }
-    catch (error) {
-        res.status(500).json({
-            success: false,
-            error: error.message
-        });
-    }
-};
-
 
 // it is not working properly because of the date format in the query params , need to fix it
 const filterRecords = async (req, res) => {
