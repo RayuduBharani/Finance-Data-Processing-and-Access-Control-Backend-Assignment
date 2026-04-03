@@ -29,6 +29,38 @@ Zorvyn is a comprehensive financial management API designed to help users and ad
 
 ---
 
+## Demo Accounts
+
+The following demo accounts are available for testing different user roles:
+
+### Admin Account
+- **Username:** bharani
+- **Email:** bharani@gmail.com
+- **Password:** 12345678
+- **Role:** admin
+- **Status:** active
+- **User ID:** 69cf477599bbbffe9668c51f
+
+### Analyst Account
+- **Username:** ashok
+- **Email:** ashok@gmail.com
+- **Password:** 12345678
+- **Role:** analyst
+- **Status:** active
+- **User ID:** 69cf486899bbbffe9668c522
+
+### Viewer Account
+- **Username:** guru
+- **Email:** guru@gmail.com
+- **Password:** 12345678
+- **Role:** viewer
+- **Status:** active
+- **User ID:** 69cf487399bbbffe9668c525
+
+**Note:** These are demo accounts for testing only.
+
+---
+
 ## Base Information
 
 ### Base URL
