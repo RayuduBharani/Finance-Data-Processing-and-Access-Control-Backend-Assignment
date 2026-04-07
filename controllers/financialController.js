@@ -172,7 +172,7 @@ const deleteFinancialEntry = async (req, res) => {
     }
 };
 
-// it is not working properly because of the date format in the query params , need to fix it
+// Filtering financial records based on date, category, type, or notes
 const filterRecords = async (req, res) => {
     const { date, category, type, notes } = req.query;
     try {
